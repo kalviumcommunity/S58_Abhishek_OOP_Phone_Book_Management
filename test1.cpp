@@ -48,8 +48,17 @@ public:
 
 int main() {
     PhoneBook myPhoneBook;
-    myPhoneBook.addContact("Alice", "123-456-7890");
-    myPhoneBook.addContact("Bob", "987-654-3210");
+
+    Contact initialContacts[] = {
+        Contact("Alice", "123-456-7890"),
+        Contact("Bob", "987-654-3210"),
+        Contact("Charlie", "555-123-4567")
+    };
+
+    for (const auto& contact : initialContacts) {
+        myPhoneBook.addContact(contact.getName(), contact.getName());
+    }
+
     myPhoneBook.displayAllContacts();
 
     return 0;
