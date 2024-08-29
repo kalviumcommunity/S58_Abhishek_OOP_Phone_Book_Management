@@ -19,41 +19,37 @@ public:
     }
 
     string getName() const {
-        return name;
+        return this->name;
     }
 };
 
 class PhoneBook {
 private:
-    vector<Contact> contacts; 
+    vector<Contact> contacts;
 
 public:
     void addContact(const string& name, const string& phoneNumber) {
         Contact newContact(name, phoneNumber);
-        contacts.push_back(newContact);
+        this->contacts.push_back(newContact);
         cout << "Contact added successfully!" << endl;
     }
 
     void displayAllContacts() const {
-        if (contacts.empty()) {
+        if (this->contacts.empty()) {
             cout << "Phone book is empty." << endl;
             return;
         }
         cout << "Contacts in Phone Book:" << endl;
-        for (const auto& contact : contacts) {
+        for (const auto& contact : this->contacts) {
             contact.displayContact();
         }
     }
 };
 
-
-
 int main() {
     PhoneBook myPhoneBook;
-
     myPhoneBook.addContact("Alice", "123-456-7890");
     myPhoneBook.addContact("Bob", "987-654-3210");
-
     myPhoneBook.displayAllContacts();
 
     return 0;
