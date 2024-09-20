@@ -25,20 +25,25 @@ public:
 
 class PhoneBook {
 private:
-    vector<Contact*> contacts;  // Store pointers to Contact objects
+    vector<Contact*> contacts;
+    static int totalContacts;
+    static const int maxContacts;
 
 public:
     ~PhoneBook() {
-        // Ensure we free up dynamically allocated memory
         for (auto contact : contacts) {
             delete contact;
         }
     }
 
     void addContact(const string& name, const string& phoneNumber) {
-        // Dynamically allocate memory for the new contact
+        if (totalContacts >= maxContacts) {
+            cout << "Cannot add more contacts. Maximum limit reached." << endl;
+            return;
+        }
         Contact* newContact = new Contact(name, phoneNumber);
         this->contacts.push_back(newContact);
+        totalContacts++;
         cout << "Contact added successfully!" << endl;
     }
 
@@ -49,15 +54,21 @@ public:
         }
         cout << "Contacts in Phone Book:" << endl;
         for (const auto& contact : this->contacts) {
-            contact->displayContact();  // Dereference the pointer to call displayContact
+            contact->displayContact();
         }
     }
+
+    static void displayTotalContacts() {
+        cout << "Total Contacts: " << totalContacts << endl;
+    }
 };
+
+int PhoneBook::totalContacts = 0;
+const int PhoneBook::maxContacts = 10;
 
 int main() {
     PhoneBook myPhoneBook;
 
-    // Dynamically allocate initial contacts using new
     Contact* initialContacts[] = {
         new Contact("Alice", "123-456-7890"),
         new Contact("Bob", "987-654-3210"),
@@ -66,11 +77,11 @@ int main() {
 
     for (const auto& contact : initialContacts) {
         myPhoneBook.addContact(contact->getName(), contact->getName());
-        // Free the memory allocated for initialContacts array, since they are already copied
         delete contact;
     }
 
     myPhoneBook.displayAllContacts();
+    PhoneBook::displayTotalContacts();
 
     return 0;
 }
