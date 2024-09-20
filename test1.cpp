@@ -25,11 +25,19 @@ public:
 
 class PhoneBook {
 private:
-    vector<Contact> contacts;
+    vector<Contact*> contacts;  // Store pointers to Contact objects
 
 public:
+    ~PhoneBook() {
+        // Ensure we free up dynamically allocated memory
+        for (auto contact : contacts) {
+            delete contact;
+        }
+    }
+
     void addContact(const string& name, const string& phoneNumber) {
-        Contact newContact(name, phoneNumber);
+        // Dynamically allocate memory for the new contact
+        Contact* newContact = new Contact(name, phoneNumber);
         this->contacts.push_back(newContact);
         cout << "Contact added successfully!" << endl;
     }
@@ -41,7 +49,7 @@ public:
         }
         cout << "Contacts in Phone Book:" << endl;
         for (const auto& contact : this->contacts) {
-            contact.displayContact();
+            contact->displayContact();  // Dereference the pointer to call displayContact
         }
     }
 };
@@ -49,14 +57,17 @@ public:
 int main() {
     PhoneBook myPhoneBook;
 
-    Contact initialContacts[] = {
-        Contact("Alice", "123-456-7890"),
-        Contact("Bob", "987-654-3210"),
-        Contact("Charlie", "555-123-4567")
+    // Dynamically allocate initial contacts using new
+    Contact* initialContacts[] = {
+        new Contact("Alice", "123-456-7890"),
+        new Contact("Bob", "987-654-3210"),
+        new Contact("Charlie", "555-123-4567")
     };
 
     for (const auto& contact : initialContacts) {
-        myPhoneBook.addContact(contact.getName(), contact.getName());
+        myPhoneBook.addContact(contact->getName(), contact->getName());
+        // Free the memory allocated for initialContacts array, since they are already copied
+        delete contact;
     }
 
     myPhoneBook.displayAllContacts();
