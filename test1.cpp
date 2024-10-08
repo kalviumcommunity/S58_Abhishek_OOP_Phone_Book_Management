@@ -10,16 +10,28 @@ private:
 
 public:
     Contact(string name, string phoneNumber) {
-        this->name = name;
-        this->phoneNumber = phoneNumber;
+        setName(name);
+        setPhoneNumber(phoneNumber);
     }
 
-    void displayContact() const {
-        cout << "Name: " << name << ", Phone Number: " << phoneNumber << endl;
+    void setName(const string& name) {
+        this->name = name;
     }
 
     string getName() const {
         return this->name;
+    }
+
+    void setPhoneNumber(const string& phoneNumber) {
+        this->phoneNumber = phoneNumber;
+    }
+
+    string getPhoneNumber() const {
+        return this->phoneNumber;
+    }
+
+    void displayContact() const {
+        cout << "Name: " << getName() << ", Phone Number: " << getPhoneNumber() << endl;
     }
 };
 
@@ -76,7 +88,7 @@ int main() {
     };
 
     for (const auto& contact : initialContacts) {
-        myPhoneBook.addContact(contact->getName(), contact->getName());
+        myPhoneBook.addContact(contact->getName(), contact->getPhoneNumber());
         delete contact;
     }
 
