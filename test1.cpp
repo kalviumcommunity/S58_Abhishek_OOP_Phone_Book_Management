@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+
 using namespace std;
 
 class Contact {
@@ -9,7 +10,7 @@ private:
     string phoneNumber;
 
 public:
-    Contact(string name, string phoneNumber) {
+    Contact(const string& name, const string& phoneNumber) {
         setName(name);
         setPhoneNumber(phoneNumber);
     }
@@ -50,22 +51,22 @@ public:
 
     void addContact(const string& name, const string& phoneNumber) {
         if (totalContacts >= maxContacts) {
-            cout << "Cannot add more contacts. Maximum limit reached." << endl;
+            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
             return;
         }
         Contact* newContact = new Contact(name, phoneNumber);
-        this->contacts.push_back(newContact);
+        contacts.push_back(newContact);
         totalContacts++;
         cout << "Contact added successfully!" << endl;
     }
 
     void displayAllContacts() const {
-        if (this->contacts.empty()) {
+        if (contacts.empty()) {
             cout << "Phone book is empty." << endl;
             return;
         }
         cout << "Contacts in Phone Book:" << endl;
-        for (const auto& contact : this->contacts) {
+        for (const auto& contact : contacts) {
             contact->displayContact();
         }
     }
