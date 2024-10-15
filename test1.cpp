@@ -10,6 +10,11 @@ private:
     string phoneNumber;
 
 public:
+    Contact() {
+        name = "Unknown";
+        phoneNumber = "000-000-0000";
+    }
+
     Contact(const string& name, const string& phoneNumber) {
         setName(name);
         setPhoneNumber(phoneNumber);
@@ -60,6 +65,17 @@ public:
         cout << "Contact added successfully!" << endl;
     }
 
+    void addContact() {  
+        if (totalContacts >= maxContacts) {
+            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
+            return;
+        }
+        Contact* newContact = new Contact();  
+        contacts.push_back(newContact);
+        totalContacts++;
+        cout << "Default contact added successfully!" << endl;
+    }
+
     void displayAllContacts() const {
         if (contacts.empty()) {
             cout << "Phone book is empty." << endl;
@@ -82,16 +98,11 @@ const int PhoneBook::maxContacts = 10;
 int main() {
     PhoneBook myPhoneBook;
 
-    Contact* initialContacts[] = {
-        new Contact("Alice", "123-456-7890"),
-        new Contact("Bob", "987-654-3210"),
-        new Contact("Charlie", "555-123-4567")
-    };
+    myPhoneBook.addContact("Alice", "123-456-7890");
+    myPhoneBook.addContact("Bob", "987-654-3210");
+    myPhoneBook.addContact("Charlie", "555-123-4567");
 
-    for (const auto& contact : initialContacts) {
-        myPhoneBook.addContact(contact->getName(), contact->getPhoneNumber());
-        delete contact;
-    }
+    myPhoneBook.addContact();
 
     myPhoneBook.displayAllContacts();
     PhoneBook::displayTotalContacts();
