@@ -11,13 +11,29 @@ private:
 
 public:
     Contact() {
+        cout << "Default constructor called" << endl;
         name = "Unknown";
         phoneNumber = "000-000-0000";
     }
 
     Contact(const string& name, const string& phoneNumber) {
+        cout << "Parameterized constructor called" << endl;
         setName(name);
         setPhoneNumber(phoneNumber);
+    }
+
+    Contact(const Contact& other) {
+        cout << "Copy constructor called" << endl;
+        name = other.name;
+        phoneNumber = other.phoneNumber;
+    }
+
+    Contact(Contact&& other) noexcept {
+        cout << "Move constructor called" << endl;
+        name = move(other.name);
+        phoneNumber = move(other.phoneNumber);
+        other.name = "Unknown";
+        other.phoneNumber = "000-000-0000";
     }
 
     void setName(const string& name) {
@@ -76,6 +92,28 @@ public:
         cout << "Default contact added successfully!" << endl;
     }
 
+    void addCopyContact(const Contact& existingContact) {
+        if (totalContacts >= maxContacts) {
+            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
+            return;
+        }
+        Contact* copyContact = new Contact(existingContact);
+        contacts.push_back(copyContact);
+        totalContacts++;
+        cout << "Copy contact added successfully!" << endl;
+    }
+
+    void addMoveContact(Contact&& tempContact) {
+        if (totalContacts >= maxContacts) {
+            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
+            return;
+        }
+        Contact* moveContact = new Contact(move(tempContact));
+        contacts.push_back(moveContact);
+        totalContacts++;
+        cout << "Move contact added successfully!" << endl;
+    }
+
     void displayAllContacts() const {
         if (contacts.empty()) {
             cout << "Phone book is empty." << endl;
@@ -103,6 +141,12 @@ int main() {
     myPhoneBook.addContact("Charlie", "555-123-4567");
 
     myPhoneBook.addContact();
+
+    Contact copiedContact("David", "111-222-3333");
+    myPhoneBook.addCopyContact(copiedContact);
+
+    Contact tempContact("Eve", "444-555-6666");
+    myPhoneBook.addMoveContact(move(tempContact));
 
     myPhoneBook.displayAllContacts();
     PhoneBook::displayTotalContacts();
