@@ -52,8 +52,38 @@ public:
         return this->phoneNumber;
     }
 
-    void displayContact() const {
+    virtual void displayContact() const {
         cout << "Name: " << getName() << ", Phone Number: " << getPhoneNumber() << endl;
+    }
+};
+
+class BusinessContact : public Contact {
+private:
+    string companyName;
+
+public:
+    BusinessContact(const string& name, const string& phoneNumber, const string& companyName)
+        : Contact(name, phoneNumber), companyName(companyName) {}
+
+    void displayContact() const override {
+        cout << "Business ";
+        Contact::displayContact();
+        cout << "Company: " << companyName << endl;
+    }
+};
+
+class PersonalContact : public Contact {
+private:
+    string birthday;
+
+public:
+    PersonalContact(const string& name, const string& phoneNumber, const string& birthday)
+        : Contact(name, phoneNumber), birthday(birthday) {}
+
+    void displayContact() const override {
+        cout << "Personal ";
+        Contact::displayContact();
+        cout << "Birthday: " << birthday << endl;
     }
 };
 
@@ -81,37 +111,26 @@ public:
         cout << "Contact added successfully!" << endl;
     }
 
-    void addContact() {  
+    void addBusinessContact(const string& name, const string& phoneNumber, const string& companyName) {
         if (totalContacts >= maxContacts) {
             cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
             return;
         }
-        Contact* newContact = new Contact();  
+        Contact* newContact = new BusinessContact(name, phoneNumber, companyName);
         contacts.push_back(newContact);
         totalContacts++;
-        cout << "Default contact added successfully!" << endl;
+        cout << "Business contact added successfully!" << endl;
     }
 
-    void addCopyContact(const Contact& existingContact) {
+    void addPersonalContact(const string& name, const string& phoneNumber, const string& birthday) {
         if (totalContacts >= maxContacts) {
             cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
             return;
         }
-        Contact* copyContact = new Contact(existingContact);
-        contacts.push_back(copyContact);
+        Contact* newContact = new PersonalContact(name, phoneNumber, birthday);
+        contacts.push_back(newContact);
         totalContacts++;
-        cout << "Copy contact added successfully!" << endl;
-    }
-
-    void addMoveContact(Contact&& tempContact) {
-        if (totalContacts >= maxContacts) {
-            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
-            return;
-        }
-        Contact* moveContact = new Contact(move(tempContact));
-        contacts.push_back(moveContact);
-        totalContacts++;
-        cout << "Move contact added successfully!" << endl;
+        cout << "Personal contact added successfully!" << endl;
     }
 
     void displayAllContacts() const {
@@ -137,16 +156,8 @@ int main() {
     PhoneBook myPhoneBook;
 
     myPhoneBook.addContact("Alice", "123-456-7890");
-    myPhoneBook.addContact("Bob", "987-654-3210");
-    myPhoneBook.addContact("Charlie", "555-123-4567");
-
-    myPhoneBook.addContact();
-
-    Contact copiedContact("David", "111-222-3333");
-    myPhoneBook.addCopyContact(copiedContact);
-
-    Contact tempContact("Eve", "444-555-6666");
-    myPhoneBook.addMoveContact(move(tempContact));
+    myPhoneBook.addBusinessContact("Bob", "987-654-3210", "Acme Corp");
+    myPhoneBook.addPersonalContact("Charlie", "555-123-4567", "01-01-1990");
 
     myPhoneBook.displayAllContacts();
     PhoneBook::displayTotalContacts();
