@@ -140,7 +140,7 @@ public:
         }
         cout << "Contacts in Phone Book:" << endl;
         for (const auto& contact : contacts) {
-            contact->displayContact();
+            contact->displayContact();  
         }
     }
 
