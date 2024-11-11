@@ -111,7 +111,7 @@ public:
         cout << "Contact added successfully!" << endl;
     }
 
-    void addBusinessContact(const string& name, const string& phoneNumber, const string& companyName) {
+    void addContact(const string& name, const string& phoneNumber, const string& companyName) {
         if (totalContacts >= maxContacts) {
             cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
             return;
@@ -122,7 +122,7 @@ public:
         cout << "Business contact added successfully!" << endl;
     }
 
-    void addPersonalContact(const string& name, const string& phoneNumber, const string& birthday) {
+    void addContact(const string& name, const string& phoneNumber, const string& birthday, bool isPersonal) {
         if (totalContacts >= maxContacts) {
             cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
             return;
@@ -156,8 +156,8 @@ int main() {
     PhoneBook myPhoneBook;
 
     myPhoneBook.addContact("Alice", "123-456-7890");
-    myPhoneBook.addBusinessContact("Bob", "987-654-3210", "Acme Corp");
-    myPhoneBook.addPersonalContact("Charlie", "555-123-4567", "01-01-1990");
+    myPhoneBook.addContact("Bob", "987-654-3210", "Acme Corp");
+    myPhoneBook.addContact("Charlie", "555-123-4567", "01-01-1990", true);
 
     myPhoneBook.displayAllContacts();
     PhoneBook::displayTotalContacts();
