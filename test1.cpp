@@ -99,6 +99,23 @@ int main() {
     myPhoneBook.addContact(new BusinessContact("Bob", "987-654-3210", "Acme Corp"));
     myPhoneBook.addContact(new PersonalContact("Charlie", "555-123-4567", "01-01-1990"));
 
+    class EmergencyContact : public Contact {
+    private:
+        string relation;
+
+    public:
+        EmergencyContact(const string& name, const string& phoneNumber, const string& relation)
+            : Contact(name, phoneNumber), relation(relation) {}
+
+        void displayContact() const override {
+            cout << "Emergency Contact - ";
+            Contact::displayContact();
+            cout << "Relation: " << relation << endl;
+        }
+    };
+
+    myPhoneBook.addContact(new EmergencyContact("Dave", "444-333-2222", "Brother"));
+
     myPhoneBook.displayAllContacts();
     PhoneBook::displayTotalContacts();
 
