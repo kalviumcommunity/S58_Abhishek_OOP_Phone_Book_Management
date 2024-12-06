@@ -1,59 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
 using namespace std;
 
 class Contact {
-private:
+protected:
     string name;
     string phoneNumber;
 
 public:
-    Contact() {
-        cout << "Default constructor called" << endl;
-        name = "Unknown";
-        phoneNumber = "000-000-0000";
-    }
+    Contact(const string& name, const string& phoneNumber) 
+        : name(name), phoneNumber(phoneNumber) {}
 
-    Contact(const string& name, const string& phoneNumber) {
-        cout << "Parameterized constructor called" << endl;
-        setName(name);
-        setPhoneNumber(phoneNumber);
-    }
-
-    Contact(const Contact& other) {
-        cout << "Copy constructor called" << endl;
-        name = other.name;
-        phoneNumber = other.phoneNumber;
-    }
-
-    Contact(Contact&& other) noexcept {
-        cout << "Move constructor called" << endl;
-        name = move(other.name);
-        phoneNumber = move(other.phoneNumber);
-        other.name = "Unknown";
-        other.phoneNumber = "000-000-0000";
-    }
-
-    void setName(const string& name) {
-        this->name = name;
-    }
-
-    string getName() const {
-        return this->name;
-    }
-
-    void setPhoneNumber(const string& phoneNumber) {
-        this->phoneNumber = phoneNumber;
-    }
-
-    string getPhoneNumber() const {
-        return this->phoneNumber;
-    }
+    virtual ~Contact() = default;
 
     virtual void displayContact() const {
-        cout << "Name: " << getName() << ", Phone Number: " << getPhoneNumber() << endl;
+        cout << "Name: " << name << ", Phone Number: " << phoneNumber << endl;
     }
 };
 
@@ -66,7 +28,7 @@ public:
         : Contact(name, phoneNumber), companyName(companyName) {}
 
     void displayContact() const override {
-        cout << "Business ";
+        cout << "Business Contact - ";
         Contact::displayContact();
         cout << "Company: " << companyName << endl;
     }
@@ -81,7 +43,7 @@ public:
         : Contact(name, phoneNumber), birthday(birthday) {}
 
     void displayContact() const override {
-        cout << "Personal ";
+        cout << "Personal Contact - ";
         Contact::displayContact();
         cout << "Birthday: " << birthday << endl;
     }
@@ -90,8 +52,8 @@ public:
 class PhoneBook {
 private:
     vector<Contact*> contacts;
-    static int totalContacts;
     static const int maxContacts;
+    static int totalContacts;
 
 public:
     ~PhoneBook() {
@@ -100,37 +62,15 @@ public:
         }
     }
 
-    void addContact(const string& name, const string& phoneNumber) {
+    void addContact(Contact* newContact) {
         if (totalContacts >= maxContacts) {
             cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
+            delete newContact;
             return;
         }
-        Contact* newContact = new Contact(name, phoneNumber);
         contacts.push_back(newContact);
         totalContacts++;
         cout << "Contact added successfully!" << endl;
-    }
-
-    void addContact(const string& name, const string& phoneNumber, const string& companyName) {
-        if (totalContacts >= maxContacts) {
-            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
-            return;
-        }
-        Contact* newContact = new BusinessContact(name, phoneNumber, companyName);
-        contacts.push_back(newContact);
-        totalContacts++;
-        cout << "Business contact added successfully!" << endl;
-    }
-
-    void addContact(const string& name, const string& phoneNumber, const string& birthday, bool isPersonal) {
-        if (totalContacts >= maxContacts) {
-            cout << "Cannot add more contacts. Maximum limit of " << maxContacts << " reached." << endl;
-            return;
-        }
-        Contact* newContact = new PersonalContact(name, phoneNumber, birthday);
-        contacts.push_back(newContact);
-        totalContacts++;
-        cout << "Personal contact added successfully!" << endl;
     }
 
     void displayAllContacts() const {
@@ -140,7 +80,7 @@ public:
         }
         cout << "Contacts in Phone Book:" << endl;
         for (const auto& contact : contacts) {
-            contact->displayContact();  
+            contact->displayContact();
         }
     }
 
@@ -155,9 +95,9 @@ const int PhoneBook::maxContacts = 10;
 int main() {
     PhoneBook myPhoneBook;
 
-    myPhoneBook.addContact("Alice", "123-456-7890");
-    myPhoneBook.addContact("Bob", "987-654-3210", "Acme Corp");
-    myPhoneBook.addContact("Charlie", "555-123-4567", "01-01-1990", true);
+    myPhoneBook.addContact(new Contact("Alice", "123-456-7890"));
+    myPhoneBook.addContact(new BusinessContact("Bob", "987-654-3210", "Acme Corp"));
+    myPhoneBook.addContact(new PersonalContact("Charlie", "555-123-4567", "01-01-1990"));
 
     myPhoneBook.displayAllContacts();
     PhoneBook::displayTotalContacts();
